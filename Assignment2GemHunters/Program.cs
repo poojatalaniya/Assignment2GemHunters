@@ -26,10 +26,11 @@ class Player
     {
         Name = name;
         Position = position;
-        GemCount = 0;
+        GemCount = 0;                                         
     }
     public void Move(char direction)
     {
+        //switch statement for moving
         switch (direction)
         {
             case 'U':
@@ -49,4 +50,28 @@ class Player
         }
     }
 }
+class Cell
+{
+    public string Occupant { get; set; }
+
+    public Cell()
+    {
+        Occupant = "-";
+    }
+}
+class Board
+{
+    private Cell[,] Grid { get; }
+
+    public Board()
+    {
+        Grid = new Cell[6, 6];
+        for (int i = 0; i < 6; i++)
+        {
+            for (int j = 0; j < 6; j++)
+            {
+                Grid[i, j] = new Cell();
+            }
+        }
+    }
 
