@@ -74,4 +74,26 @@ class Board
             }
         }
     }
+    public void Display(Player player1, Player player2)
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            for (int j = 0; j < 6; j++)
+            {
+                if (player1.Position.X == j && player1.Position.Y == i)
+                {
+                    Console.Write("P1 ");
+                }
+                else if (player2.Position.X == j && player2.Position.Y == i)
+                {
+                    Console.Write("P2 ");
+                }
+                else
+                {
+                    Console.Write(Grid[i, j].Occupant + " ");
+                }
+            }
+            Console.WriteLine();
+        }
+    }
 
