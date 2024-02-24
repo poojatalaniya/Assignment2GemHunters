@@ -96,4 +96,129 @@ class Board
             Console.WriteLine();
         }
     }
+    public bool IsValidMove(Player player, char direction)
+    {
+        int x = player.Position.X;
+        int y = player.Position.Y;
+
+        if (direction == 'U')
+        {
+            y--;
+        }
+        else if (direction == 'D')
+        {
+            y++;
+        }
+        else if (direction == 'L')
+        {
+            x--;
+        }
+        else if (direction == 'R')
+        {
+            x++;
+        }
+
+        if (x < 0 || x >= 6 || y < 0 || y >= 6)
+        {
+            return false;
+        }
+        if (Grid[y, x].Occupant == "O")
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public void CollectGem(Player player)
+    {
+        int x = player.Position.X;
+        int y = player.Position.Y;
+
+        if (Grid[y, x].Occupant == "G")
+        {
+            player.GemCount++;
+            Grid[y, x].Occupant = "-";
+        }
+    }
+}
+
+class Game
+{
+    private Board Board { get; }
+    private Player Player1 { get; }
+    private Player Player2 { get; }
+    private Player CurrentTurn { get; set; }
+    private int TotalTurns { get; set; }
+
+    public Game()
+    {
+        Board = new Board();
+        Player1 = new Player("P1", new Position(0, 0));
+        Player2 = new Player("P2", new Position(5, 5));
+        CurrentTurn = Player1;
+        TotalTurns = 0;
+    }
+
+    public void Start()
+    {
+        while (!IsGameOver())
+        {
+            Board.Display(Player1, Player2);
+            Console.WriteLine($"It's {CurrentTurn.Name}'s turn.");
+            Console.Write("Enter direction (U/D/L/R): ");
+            char direction = char.ToUpper(Console.ReadKey().KeyChar);
+            Console.WriteLine();
+
+            if (Board.IsValidMove(CurrentTurn, direction))
+            {
+                CurrentTurn.Move(direction);
+                Board.CollectGem(CurrentTurn);
+                TotalTurns++;
+                SwitchTurn();
+            }
+            else
+            {
+                Console.WriteLine("Invalid move. Try again.");
+            }
+        }
+
+        AnnounceWinner();
+    }
+
+    private void SwitchTurn()
+    {
+        CurrentTurn = (CurrentTurn == Player1) ? Player2 : Player1;
+    }
+
+    private bool IsGameOver()
+    {
+        return TotalTurns >= 30;
+    }
+
+    private void AnnounceWinner()
+    {
+        if (Player1.GemCount > Player2.GemCount)
+        {
+            Console.WriteLine("Player 1 wins!");
+        }
+        else if (Player1.GemCount < Player2.GemCount)
+        {
+            Console.WriteLine("Player 2 wins!");
+        }
+        else
+        {
+            Console.WriteLine("It's a tie!");
+        }
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Game game = new Game();
+        game.Start();
+    }
+}
 
