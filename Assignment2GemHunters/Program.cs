@@ -1,4 +1,4 @@
-﻿//Assignment2-Game Hunters
+﻿//Assignment2-Gem Hunters
 //By Pooja Talaniya - Ptalaniya4569@conestogac.on.ca - 8904569
 //Beginning of the Code
 
@@ -62,16 +62,35 @@ class Cell
 class Board
 {
     private Cell[,] Grid { get; }
+    private Random random;
 
     public Board()
     {
         Grid = new Cell[6, 6];
+        random = new Random();
+
+        //Initializing board with empty cells
         for (int i = 0; i < 6; i++)
         {
             for (int j = 0; j < 6; j++)
             {
                 Grid[i, j] = new Cell();
             }
+        }
+        // Placing obstacles randomly
+        for (int i = 0; i < 6; i++)
+        {
+            int obstacleX = random.Next(6);
+            int obstacleY = random.Next(6);
+            Grid[obstacleY, obstacleX].Occupant = "O";
+        }
+
+        // Placing gems randomly
+        for (int i = 0; i < 5; i++)
+        {
+            int gemX = random.Next(6);
+            int gemY = random.Next(6);
+            Grid[gemY, gemX].Occupant = "G";
         }
     }
     public void Display(Player player1, Player player2)
